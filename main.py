@@ -10,17 +10,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.svm import SVC
 
-def get_average(tweets: List[Tweet], token: str) -> float:
-    count = 0
-    for tweet in tweets:
-        count += tweet.count(token)
-
-    return float(count) / len(tweets)
-
 def to_feature_row(tweets: List[Tweet]) -> List[float]:
     row = []
     for feature in features:
-        row.append(get_average(tweets, feature.token))
+        row.append(data_parser.get_average(tweets, feature.token))
     return row
 
 def to_table(data: Dict[UserID, List[Tweet]], truths: Dict[UserID, float]) -> List[List[float]]:

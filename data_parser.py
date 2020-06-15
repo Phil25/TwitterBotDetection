@@ -13,6 +13,13 @@ def _get_tweets(training_path, file) -> List[str]:
     root = ET.parse(path.join(training_path, file)).getroot()
     return [d.text for d in root.findall(".//document")]
 
+def get_average(tweets: List[Tweet], token: str) -> float:
+    count = 0
+    for tweet in tweets:
+        count += tweet.count(token)
+
+    return float(count) / len(tweets)
+
 def get_data(cwd, use_cache: bool=True) -> Dict[UserID, List[Tweet]]:
     cache_path = path.join(gettempdir(), "preprocessed_tweets_cache")
 
