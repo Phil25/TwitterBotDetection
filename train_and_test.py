@@ -2,9 +2,10 @@ import os
 from utils import data_parser
 from utils.twitter_types import UserID, Tweet
 from utils.features import features
+from utils.thirdparty import plot_learning_curve
 from typing import Dict, List
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import ShuffleSplit
+import matplotlib.pyplot as plt
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
@@ -35,9 +36,6 @@ def main():
     x = [row[:-1] for row in table] # features
     y = [row[-1] for row in table]  # labels
 
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-    print(f"Dataset split (train: {len(y_train)}, test: {len(y_test)})")
-
     classifiers = [
         (RandomForestClassifier(), "Random Forest"),
         (AdaBoostClassifier(), "AdaBoost"),
@@ -45,14 +43,15 @@ def main():
         (SVC(gamma=2, C=1), "RBF SVM"),
     ]
 
-    print("Accuracies:")
+    fig, axes = plt.subplots(3, 4, figsize=(20, 15))
+    cv = ShuffleSplit(n_splits=100, test_size=0.2, random_state=0)
 
-    for clf, name in classifiers:
-        clf.fit(x_train, y_train)
-        y_pred = clf.predict(x_test)
+    for i in range(len(classifiers)):
+        clf, name = classifiers[i]
+        plot_learning_curve(clf, name, x, y, axes=axes[:,i], ylim=(0.7, 1.01), cv=cv, n_jobs=4)
 
-        accuracy = metrics.accuracy_score(y_test, y_pred)
-        print(f"{name:>16} : {accuracy}")
+    fig.tight_layout()
+    plt.savefig("learning_curves.png")
 
 if __name__ == "__main__":
     main()
