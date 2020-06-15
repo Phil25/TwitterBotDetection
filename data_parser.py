@@ -1,3 +1,5 @@
+import pickle
+from tempfile import gettempdir
 from preprocessor import preprocess_tweets
 from xml.etree import ElementTree as ET
 from os import listdir, path
@@ -11,7 +13,12 @@ def _get_tweets(training_path, file) -> List[str]:
     root = ET.parse(path.join(training_path, file)).getroot()
     return [d.text for d in root.findall(".//document")]
 
-def get_data(cwd) -> Dict[UserID, List[Tweet]]:
+def get_data(cwd, use_cache: bool=True) -> Dict[UserID, List[Tweet]]:
+    cache_path = path.join(gettempdir(), "preprocessed_tweets_cache")
+
+    if path.exists(cache_path) and use_cache:
+        return pickle.load(open(cache_path, "rb"))
+
     training_path = _get_training_path(cwd)
     data = {}
 
@@ -22,9 +29,15 @@ def get_data(cwd) -> Dict[UserID, List[Tweet]]:
         user_id = file.replace(".xml", "")
         data[user_id] = preprocess_tweets(_get_tweets(training_path, file))
 
+    pickle.dump(data, open(cache_path, "wb"))
     return data
 
-def get_truths(cwd) -> Dict[UserID, float]:
+def get_truths(cwd, use_cache: bool=True) -> Dict[UserID, float]:
+    cache_path = path.join(gettempdir(), "tweet_truths_cache")
+
+    if path.exists(cache_path) and use_cache:
+        return pickle.load(open(cache_path, "rb"))
+
     training_path = _get_training_path(cwd)
     truths = {}
 
@@ -33,4 +46,5 @@ def get_truths(cwd) -> Dict[UserID, float]:
             user_id, label, gender = line.split(":::")
             truths[user_id] = 1. if label == "bot" else 0.
 
+    pickle.dump(truths, open(cache_path, "wb"))
     return truths
