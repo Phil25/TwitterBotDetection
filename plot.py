@@ -1,5 +1,6 @@
 import os
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import numpy as np
 from utils import data_parser
 from utils.features import features
@@ -9,6 +10,10 @@ from typing import Dict, List
 def generate_plot(ax, data: Dict[UserID, List[Tweet]], truths: Dict[UserID, float], token: str):
     avg_bots = []
     avg_hums = []
+
+    # add percentage symbol to x axis
+    xticks = mtick.FormatStrFormatter("%.0f%%")
+    ax.xaxis.set_major_formatter(xticks)
 
     for user_id, tweets in data.items():
         if truths[user_id] > 0.5:
