@@ -1,8 +1,8 @@
 import os
-import data_parser
+from utils import data_parser
+from utils.twitter_types import UserID, Tweet
+from utils.features import features
 from typing import Dict, List
-from twitter_types import UserID, Tweet
-from features import features
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 

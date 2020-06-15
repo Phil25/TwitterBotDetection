@@ -1,10 +1,10 @@
 import os
-import data_parser
 import matplotlib.pyplot as plt
 import numpy as np
+from utils import data_parser
+from utils.features import features
+from utils.twitter_types import UserID, Tweet
 from typing import Dict, List
-from features import features
-from twitter_types import UserID, Tweet
 
 def generate_plot(ax, data: Dict[UserID, List[Tweet]], truths: Dict[UserID, float], token: str):
     avg_bots = []

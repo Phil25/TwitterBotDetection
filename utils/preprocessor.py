@@ -1,8 +1,8 @@
 import re
 import nltk # TODO: nltk.download("punkt")
-from features import Feature, features
+from utils.features import Feature, features
+from utils.twitter_types import Tweet
 from typing import List
-from twitter_types import Tweet
 
 def _tokenize(tweets: List[str], feature: Feature) -> List[str]:
     return [re.sub(feature.regex, f" {feature.token} ", tweet).strip() for tweet in tweets]

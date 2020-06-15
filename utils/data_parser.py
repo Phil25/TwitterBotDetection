@@ -1,10 +1,10 @@
 import pickle
 from tempfile import gettempdir
-from preprocessor import preprocess_tweets
+from utils.preprocessor import preprocess_tweets
+from utils.twitter_types import UserID, Tweet
 from xml.etree import ElementTree as ET
 from os import listdir, path
 from typing import Dict, List
-from twitter_types import UserID, Tweet
 
 def _get_training_path(cwd) -> str:
     return path.join(cwd, "pan19", "pan19-author-profiling-training-2019-02-18", "en")
