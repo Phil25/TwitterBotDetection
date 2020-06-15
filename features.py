@@ -3,7 +3,7 @@ from collections import namedtuple
 Feature = namedtuple("Feature", ["regex", "token"])
 
 features = [
-    Feature(r"http[s]?://t\.co\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", "token_url_tweeter"),
+    Feature(r"http[s]?://t\.co\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", "token_url_twitter"),
     Feature(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", "token_url_other"),
     Feature(r"^RT\s(?:.+\s)?@\w+\:", "token_retweet"),  # "RT @user: (...)"
     Feature(r"^@\w+", "token_reply"),                   # "@user (...)"
