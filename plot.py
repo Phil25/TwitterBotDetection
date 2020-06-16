@@ -1,3 +1,4 @@
+import sys
 import os
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
@@ -25,9 +26,9 @@ def generate_plot(ax, data: Dict[UserID, List[Tweet]], truths: Dict[UserID, floa
     ax.legend(loc="upper right")
     ax.set_title(f"{token}")
 
-def main():
-    data = data_parser.get_data(os.getcwd())
-    truths = data_parser.get_truths(os.getcwd())
+def main(no_cache: bool):
+    data = data_parser.get_data(os.getcwd(), use_cache=not no_cache)
+    truths = data_parser.get_truths(os.getcwd(), use_cache=not no_cache)
 
     feature_count = len(features)
     fig, axs = plt.subplots(feature_count, figsize=(10, 10))
@@ -39,4 +40,4 @@ def main():
     plt.savefig("token_histograms.png")
 
 if __name__ == "__main__":
-    main()
+    main("--no-cache" in sys.argv)

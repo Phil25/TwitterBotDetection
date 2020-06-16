@@ -1,3 +1,4 @@
+import sys
 import os
 from utils import data_parser
 from utils.twitter_types import UserID, Tweet
@@ -26,9 +27,9 @@ def to_table(data: Dict[UserID, List[Tweet]], truths: Dict[UserID, float]) -> Li
 
     return table
 
-def main():
-    data = data_parser.get_data(os.getcwd())
-    truths = data_parser.get_truths(os.getcwd())
+def main(no_cache: bool):
+    data = data_parser.get_data(os.getcwd(), use_cache=not no_cache)
+    truths = data_parser.get_truths(os.getcwd(), use_cache=not no_cache)
     table = to_table(data, truths)
 
     print(f"Retrieved data ({len(data)} records)")
@@ -54,4 +55,4 @@ def main():
     plt.savefig("learning_curves.png")
 
 if __name__ == "__main__":
-    main()
+    main("--no-cache" in sys.argv)
