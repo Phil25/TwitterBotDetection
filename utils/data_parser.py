@@ -1,6 +1,6 @@
 import pickle
 from tempfile import gettempdir
-from utils.preprocessor import preprocess_tweets
+from utils.preprocessor import nltk_cleanup, preprocess_tweets
 from utils.twitter_types import UserID, Tweet
 from xml.etree import ElementTree as ET
 from os import listdir, path
@@ -29,12 +29,13 @@ def get_data(cwd, use_cache: bool=True) -> Dict[UserID, List[Tweet]]:
     training_path = _get_training_path(cwd)
     data = {}
 
-    for file in listdir(training_path):
-        if ".xml" not in file:
-            continue
+    with nltk_cleanup():
+        for file in listdir(training_path):
+            if ".xml" not in file:
+                continue
 
-        user_id = file.replace(".xml", "")
-        data[user_id] = preprocess_tweets(_get_tweets(training_path, file))
+            user_id = file.replace(".xml", "")
+            data[user_id] = preprocess_tweets(_get_tweets(training_path, file))
 
     pickle.dump(data, open(cache_path, "wb"))
     return data
