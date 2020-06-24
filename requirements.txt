@@ -1,3 +1,4 @@
 scikit-learn==0.23.1
 nltk==3.5
 matplotlib==3.2.1
+Keras==2.4.2
